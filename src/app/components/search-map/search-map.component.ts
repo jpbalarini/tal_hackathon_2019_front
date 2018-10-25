@@ -12,11 +12,11 @@ export class SearchMapComponent implements OnInit, OnChanges {
   @Input() places = [];
   @Input() markers: [any];
   @Input() circles: [any];
-  initialLocation = new google.maps.LatLng(-34.906836, -56.180388);
+  initialLocation = new google.maps.LatLng(30.2672, -97.7031);
   map: google.maps.Map;
   googlePlacesService: google.maps.places.PlacesService;
   maxSearchRadius = 50000;
-  minSearchRadius = 500;
+  minSearchRadius = 2000;
   maxCirclesReached = false;
 
   constructor() {}
@@ -38,7 +38,7 @@ export class SearchMapComponent implements OnInit, OnChanges {
   loadMap() {
     this.map = new google.maps.Map(this.googleMap.nativeElement, {
       center: this.initialLocation,
-      zoom: 14,
+      zoom: 13,
       styles: [
         {
           featureType: 'poi',
@@ -80,7 +80,7 @@ export class SearchMapComponent implements OnInit, OnChanges {
       const searchArea = new google.maps.Circle({
         map: this.map,
         center: event.latLng,
-        radius: 500,
+        radius: this.minSearchRadius,
         draggable: true,
         editable: true,
         strokeColor: '#53af7e',

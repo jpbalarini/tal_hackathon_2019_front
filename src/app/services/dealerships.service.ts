@@ -21,7 +21,7 @@ export class DealershipsService {
     return this.http.get(`${this.dealershipsUrl}/find`, { params: params }).catch(this.http.handleError)
   }
 
-  export() {
-    return this.http.get(`${this.dealershipsUrl}/export.csv`, { responseType: 'text' }).catch(this.http.handleError)
+  export(ids) {
+    return this.http.get(`${this.dealershipsUrl}/export.csv?dealership_ids=${ids}`, { responseType: 'text' }).catch(this.http.handleError)
   }
 }

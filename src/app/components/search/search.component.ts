@@ -72,24 +72,26 @@ export class SearchComponent {
   }
 
   downloadCsv() {
-    this.dealershipsService.export().subscribe(
+    const ids = this.results.map(dealer => dealer.id);
+    this.dealershipsService.export(ids).subscribe(
       data => this.downloadFile(data)
     );
   }
 
   downloadFile(data: Response) {
-    var filename = data.headers.get('Exported-Filename');
-    var todaysDate = new Date().toLocaleDateString();
+    let blob = new Blob([data], { type: 'text/csv' });
+    let url = window.URL.createObjectURL(blob);
 
-    var url = window.URL.createObjectURL(data.blob());
-    var temporaryLink = window.document.createElement('a');
-
-    temporaryLink.href = url;
-
-    temporaryLink.download = filename || todaysDate + '.csv';
-
-    document.body.appendChild(temporaryLink);
-    temporaryLink.click();
-    document.body.removeChild(temporaryLink);
+    if(navigator.msSaveOrOpenBlob) {
+        navigator.msSaveBlob(blob, 'dealers.csv');
+    } else {
+        let a = document.createElement('a');
+        a.href = url;
+        a.download = 'dealers.csv';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+    window.URL.revokeObjectURL(url);
   }
 }
