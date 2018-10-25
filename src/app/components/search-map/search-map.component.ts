@@ -91,13 +91,13 @@ export class SearchMapComponent implements OnInit, OnChanges {
       });
 
       this.location.emit({
-        position: searchArea.getBounds(),
+        position: searchArea.getCenter(),
         radius: searchArea.getRadius(),
       });
 
-      google.maps.event.addListener(searchArea, 'center_changed', () => {
+      google.maps.event.addListener(searchArea, 'dragend', () => {
         this.location.emit({
-          position: searchArea.getBounds(),
+          position: searchArea.getCenter(),
           radius: searchArea.getRadius(),
         });
       });
