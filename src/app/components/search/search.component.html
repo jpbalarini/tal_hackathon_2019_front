@@ -1,8 +1,26 @@
-<div class="page">
-  <div class="filters">
-    <div class="search-option">
-
+<div class="filters">
+  <div class="header">
+    <img src='../../assets/logo.png'>
+  </div>
+  <div class="search-option">
+    <div class="name">Location</div>
+    <input [(ngModel)]="location">
+  </div>
+  <div class="search-option" *ngIf="results">
+    <div class="name">Results ({{results.length}})</div>
+    <div class="results">
+      <div class="result" *ngFor="let result of results">
+        <div class="name">Name: {{result.name}}</div>
+        <div>Website: {{result.website}}</div>
+        <div>Address: {{result.formatted_address}}</div>
+        <div>Phone number: {{result.formatted_phone_number}}</div>
+        <div>Rating: {{result.rating}}</div>
+        <div class="tags">
+          <div class="tag" *ngFor="let tag of result.tags">{{tag}}</div>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="map"></div>
+  <button class="search" (click)="search()">Search</button>
 </div>
+<div class="map" (location)="updateLocation($event)"></div>
