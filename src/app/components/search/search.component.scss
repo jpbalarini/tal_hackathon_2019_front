@@ -16,7 +16,7 @@
   width: 300px;
   background: #dfe2e5;
   padding: 15px;
-  padding-top: 45px;
+  padding-top: 50px;
   overflow: scroll;
 
   .header {
@@ -26,7 +26,7 @@
     background: #53af7e;
     text-align: center;
     width: 100%;
-    padding: 5px 0px;
+    padding: 10px 0px;
   }
 
   .search-option {
@@ -36,7 +36,8 @@
     margin: 10px 0px;
 
     .name {
-      font-size: 23px;
+      font-size: 20px;
+      padding-bottom: 5px;
     }
 
     a {
@@ -52,6 +53,7 @@
       border: none;
       border-bottom: 1px solid grey;
       width: 100%;
+      font-size: 14px;
     }
 
     .result {
