@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, Output, Input, EventEmitter } from '@angular/core';
+import { Component, ViewChild, OnInit, Output, Input, EventEmitter, OnChanges } from '@angular/core';
 import {} from '@types/googlemaps';
 
 @Component({
@@ -6,7 +6,7 @@ import {} from '@types/googlemaps';
   templateUrl: './search-map.component.html',
   styleUrls: ['./search-map.component.scss']
 })
-export class SearchMapComponent implements OnInit {
+export class SearchMapComponent implements OnInit, OnChanges {
   @ViewChild('googleMap') googleMap: any;
   @Output() location = new EventEmitter<{}>();
   @Input() places = [];
@@ -27,7 +27,7 @@ export class SearchMapComponent implements OnInit {
   }
 
   ngOnChanges(changes) {
-    if(changes.places && this.places && this.places.length > 0) {
+    if (changes.places && this.places && this.places.length > 0) {
       this.adjustMap(this.places)
     }
     if(changes.circles && this.circles && this.circles.length > 0) {
@@ -54,11 +54,11 @@ export class SearchMapComponent implements OnInit {
   }
 
   adjustMap(places) {
-    console.log(places)
-    var bounds = new google.maps.LatLngBounds();
+    console.log(places);
+    const bounds = new google.maps.LatLngBounds();
     places.forEach(function(place) {
       if (!place.geometry) {
-        console.log("Returned place contains no geometry");
+        console.log('Returned place contains no geometry');
         return;
       }
 
@@ -93,6 +93,13 @@ export class SearchMapComponent implements OnInit {
       this.location.emit({
         position: searchArea.getBounds(),
         radius: searchArea.getRadius(),
+      });
+
+      google.maps.event.addListener(searchArea, 'center_changed', () => {
+        this.location.emit({
+          position: searchArea.getBounds(),
+          radius: searchArea.getRadius(),
+        });
       });
 
       google.maps.event.addListener(searchArea, 'radius_changed', () => {

@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 
 import { HttpService } from './services/http.service';
 import { DealershipsService } from './services/dealerships.service';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { DealershipsService } from './services/dealerships.service';
     HttpClientModule,
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    NgxSpinnerModule
   ],
   providers: [
     DealershipsService,

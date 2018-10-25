@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { DealershipsService } from '../../services/dealerships.service';
 import {} from '@types/googlemaps';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'search',
@@ -11,7 +12,6 @@ export class SearchComponent {
   location: string;
   results: any[] = [];
   circles: any[] = [];
-  showLoader = false;
   errorMessage: string;
   latitude: number;
   longitude: number;
@@ -19,7 +19,7 @@ export class SearchComponent {
   filters = {};
   places = [];
 
-  constructor(private dealershipsService: DealershipsService) {}
+  constructor(private dealershipsService: DealershipsService, private spinner: NgxSpinnerService) {}
 
 
   ngOnInit() {
@@ -52,7 +52,7 @@ export class SearchComponent {
   }
 
   search() {
-    this.showLoader = true;
+    this.spinner.show();
     this.dealershipsService.findDealerships(this.latitude, this.longitude, this.radius).subscribe(
       data => {
         this.results = data.dealerships;
@@ -61,10 +61,11 @@ export class SearchComponent {
           this.errorMessage = 'No dealerships available'
         }
         console.log(this.results);
+        this.spinner.hide();
       },
       error =>  {
         this.errorMessage = error;
-        this.showLoader = false;
+        this.spinner.hide();
       }
     );
   }
