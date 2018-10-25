@@ -4,8 +4,9 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { SearchComponent } from './components/search/search.component';
+import { SearchMapComponent } from './components/search-map/search-map.component';
 
-import { AppRoutingModule }   from './app.routes';
+import { AppRoutingModule } from './app.routes';
 import { FormsModule } from '@angular/forms';
 
 import { HttpService } from './services/http.service';
@@ -14,7 +15,8 @@ import { DealershipsService } from './services/dealerships.service';
 @NgModule({
   declarations: [
     AppComponent,
-    SearchComponent
+    SearchComponent,
+    SearchMapComponent,
   ],
   imports: [
     HttpClientModule,
