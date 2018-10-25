@@ -23,4 +23,4 @@
   </div>
   <button [disabled]="!latitude || !longitude || !radius" class="search" (click)="search()">Search</button>
 </div>
-<search-map [places]="places" [markers]="results" (location)="updateLocation($event)"></search-map>
+<search-map [places]="places" [markers]="results" [circles]="circles" (location)="updateLocation($event)"></search-map>

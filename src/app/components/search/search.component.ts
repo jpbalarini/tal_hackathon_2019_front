@@ -10,6 +10,7 @@ import {} from '@types/googlemaps';
 export class SearchComponent {
   location: string;
   results: any[] = [];
+  circles: any[] = [];
   showLoader = false;
   errorMessage: string;
   latitude: number;
@@ -55,6 +56,7 @@ export class SearchComponent {
     this.dealershipsService.findDealerships(this.latitude, this.longitude, this.radius).subscribe(
       data => {
         this.results = data.dealerships;
+        this.circles = data.circles;
         if (!this.results || this.results.length <= 0) {
           this.errorMessage = 'No dealerships available'
         }

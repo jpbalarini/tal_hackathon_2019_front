@@ -11,6 +11,7 @@ export class SearchMapComponent implements OnInit {
   @Output() location = new EventEmitter<{}>();
   @Input() places = [];
   @Input() markers: [any];
+  @Input() circles: [any];
   initialLocation = new google.maps.LatLng(-34.906836, -56.180388);
   map: google.maps.Map;
   googlePlacesService: google.maps.places.PlacesService;
@@ -29,7 +30,7 @@ export class SearchMapComponent implements OnInit {
     if(changes.places && this.places && this.places.length > 0) {
       this.adjustMap(this.places)
     }
-    if(changes.markers && this.markers && this.markers.length > 0) {
+    if(changes.circles && this.circles && this.circles.length > 0) {
       this.generateMarkers()
     }
   }
@@ -112,13 +113,38 @@ export class SearchMapComponent implements OnInit {
 
   generateMarkers() {
     const image = '../../../assets/TAL-marker.png';
+
+    console.log(this.markers)
     for (let marker of this.markers) {
       const dealershipMarker = new google.maps.Marker({
-        position: {lat: marker.latitude, lng: marker.longitude},
+        position: { lat: parseFloat(marker.latitude), lng: parseFloat(marker.longitude) },
         map: this.map,
         animation: google.maps.Animation.DROP,
         title: 'Hello World!',
         icon: image
+      });
+      var contentString = `
+        <div class="name">Name: ${marker.name}</div>
+        <div>Website: ${marker.website}</div>
+        <div>Address: ${marker.formatted_address}</div>
+        <div>Phone number: ${marker.formatted_phone_number}</div>
+        <div>Rating: ${marker.rating}</div>
+      `
+      var infowindow = new google.maps.InfoWindow({
+        content: contentString
+      });
+
+      dealershipMarker.addListener('click', function() {
+        infowindow.open(this.map, dealershipMarker);
+      });
+    }
+
+    for (let circle of this.circles) {
+      var circleLocation = new google.maps.LatLng(circle.latitude, circle.longitude);
+      const dealershipCircle = new google.maps.Circle({
+        center: circleLocation,
+        map: this.map,
+        radius: 2000
       });
     }
   }
