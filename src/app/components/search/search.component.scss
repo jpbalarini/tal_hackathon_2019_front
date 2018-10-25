@@ -13,10 +13,11 @@
   top: 0;
   left: 0;
   height: 100%;
-  width: 300px;
+  width: 270px;
   background: #dfe2e5;
   padding: 15px;
   padding-top: 45px;
+  overflow: scroll;
 
   .header {
     position: absolute;
@@ -45,7 +46,7 @@
     }
 
     .result {
-      margin: 5px 0px;
+      margin: 20px 0px;
     }
 
     .tag {

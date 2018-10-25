@@ -6,6 +6,7 @@
     <div class="name">Location</div>
     <input id="map-location" class='search-input' type="text" placeholder="">
   </div>
+  <button [disabled]="!latitude || !longitude || !radius" class="search" (click)="search()">Search</button>
   <div class="search-option" *ngIf="results.length > 0">
     <div class="name">Results ({{results.length}})</div>
     <div class="results">
@@ -21,6 +22,5 @@
       </div>
     </div>
   </div>
-  <button [disabled]="!latitude || !longitude || !radius" class="search" (click)="search()">Search</button>
 </div>
 <search-map [places]="places" [markers]="results" [circles]="circles" (location)="updateLocation($event)"></search-map>
