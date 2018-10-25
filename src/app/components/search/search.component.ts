@@ -9,7 +9,7 @@ import {} from '@types/googlemaps';
 })
 export class SearchComponent {
   location: string;
-  results: any[];
+  results: any[] = [];
   showLoader = false;
   errorMessage: string;
   latitude: number;
@@ -58,6 +58,7 @@ export class SearchComponent {
         if (!this.results || this.results.length <= 0) {
           this.errorMessage = 'No dealerships available'
         }
+        console.log(this.results);
       },
       error =>  {
         this.errorMessage = error;

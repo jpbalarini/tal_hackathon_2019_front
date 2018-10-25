@@ -10,6 +10,7 @@ export class SearchMapComponent implements OnInit {
   @ViewChild('googleMap') googleMap: any;
   @Output() location = new EventEmitter<{}>();
   @Input() places = [];
+  @Input() markers: [any];
   initialLocation = new google.maps.LatLng(-34.906836, -56.180388);
   map: google.maps.Map;
   googlePlacesService: google.maps.places.PlacesService;
@@ -21,11 +22,15 @@ export class SearchMapComponent implements OnInit {
 
   ngOnInit() {
     this.loadMap();
+    this.generateMarkers();
   }
 
   ngOnChanges(changes) {
     if(changes.places && this.places && this.places.length > 0) {
       this.adjustMap(this.places)
+    }
+    if(changes.markers && this.markers && this.markers.length > 0) {
+      this.generateMarkers()
     }
   }
 
@@ -84,6 +89,11 @@ export class SearchMapComponent implements OnInit {
         fillOpacity: 0.3
       });
 
+      this.location.emit({
+        position: searchArea.getBounds(),
+        radius: searchArea.getRadius(),
+      });
+
       google.maps.event.addListener(searchArea, 'radius_changed', () => {
         if (searchArea.getRadius() > this.maxSearchRadius) {
           searchArea.setRadius(this.maxSearchRadius);
@@ -98,5 +108,18 @@ export class SearchMapComponent implements OnInit {
         });
       });
     });
+  }
+
+  generateMarkers() {
+    const image = '../../../assets/TAL-marker.png';
+    for (let marker of this.markers) {
+      const dealershipMarker = new google.maps.Marker({
+        position: {lat: marker.latitude, lng: marker.longitude},
+        map: this.map,
+        animation: google.maps.Animation.DROP,
+        title: 'Hello World!',
+        icon: image
+      });
+    }
   }
 }

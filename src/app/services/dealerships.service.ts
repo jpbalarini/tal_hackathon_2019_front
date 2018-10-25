@@ -17,6 +17,7 @@ export class DealershipsService {
     params = params.append('longitude', longitude);
     params = params.append('latitude', latitude);
     params = params.append('radius', radius);
+    console.log(params)
     return this.http.get(`${this.dealershipsUrl}/find`, { params: params }).catch(this.http.handleError)
   }
 }

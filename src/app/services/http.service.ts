@@ -23,6 +23,6 @@ export class HttpService extends HttpClient {
   }
 
   getApiUrl(): string {
-    return 'http://192.168.86.57:3000'
+    return 'http://192.168.86.57:3000/api/v1'
   }
 }
