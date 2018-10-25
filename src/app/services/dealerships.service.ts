@@ -12,7 +12,7 @@ export class DealershipsService {
 
   constructor (private http: HttpService) {}
 
-  findDealerships(longitude, latitude, radius) {
+  findDealerships(latitude, longitude, radius) {
     let params = new HttpParams();
     params = params.append('longitude', longitude);
     params = params.append('latitude', latitude);
