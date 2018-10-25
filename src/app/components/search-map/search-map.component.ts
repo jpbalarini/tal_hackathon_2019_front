@@ -94,6 +94,13 @@ export class SearchMapComponent implements OnInit, OnChanges {
         radius: searchArea.getRadius(),
       });
 
+      google.maps.event.addListener(searchArea, 'center_changed', () => {
+        this.location.emit({
+          position: searchArea.getBounds(),
+          radius: searchArea.getRadius(),
+        });
+      });
+
       google.maps.event.addListener(searchArea, 'radius_changed', () => {
         if (searchArea.getRadius() > this.maxSearchRadius) {
           searchArea.setRadius(this.maxSearchRadius);
