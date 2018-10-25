@@ -22,6 +22,7 @@
     </div>
   </div>
   <button [disabled]="!latitude || !longitude || !radius" class="search" (click)="search()">Search</button>
+  <button [disabled]="results.length == 0" class="search" (click)="downloadCsv()">Export to CSV</button>
 </div>
 <search-map [places]="places" [markers]="results" (location)="updateLocation($event)"></search-map>
 <ngx-spinner
