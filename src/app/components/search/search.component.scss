@@ -13,7 +13,7 @@
   top: 0;
   left: 0;
   height: 100%;
-  width: 270px;
+  width: 300px;
   background: #dfe2e5;
   padding: 15px;
   padding-top: 45px;
@@ -32,8 +32,17 @@
   .search-option {
     background: white;
     border-radius: 5px;
-    padding: 5px;
+    padding: 10px;
     margin: 10px 0px;
+
+    .name {
+      font-size: 23px;
+    }
+
+    a {
+      margin-bottom: 15px;
+      display: block;
+    }
 
     .title {
       margin-bottom: 20px;
@@ -63,8 +72,8 @@
   .search {
     background: #53af7e;
     color: white;
-    padding: 5px;
-    font-size: 18px;
+    padding: 8px;
+    font-size: 22px;
     border-radius: 8px;
   }
 }

@@ -53,6 +53,7 @@ export class SearchComponent {
 
   search() {
     this.spinner.show();
+    this.results = []
     this.dealershipsService.findDealerships(this.latitude, this.longitude, this.radius).subscribe(
       data => {
         this.results = data.dealerships;

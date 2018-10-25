@@ -8,11 +8,11 @@
   </div>
   <button [disabled]="!latitude || !longitude || !radius" class="search" (click)="search()">Search</button>
   <div class="search-option" *ngIf="results.length > 0">
-    <div class="name">Results ({{results.length}})</div>
+    <div class="title">Results ({{results.length}})</div>
     <div class="results">
       <div class="result" *ngFor="let result of results">
-        <div class="name">Name: {{result.name}}</div>
-        <div>Website: {{result.website}}</div>
+        <div class="name">{{result.name}}</div>
+        <a href="{{result.website}}" class="website">{{result.website}}</a>
         <div>Address: {{result.formatted_address}}</div>
         <div>Phone number: {{result.formatted_phone_number}}</div>
         <div>Rating: {{result.rating}}</div>

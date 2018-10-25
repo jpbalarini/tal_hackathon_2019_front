@@ -127,7 +127,7 @@ export class SearchMapComponent implements OnInit, OnChanges {
         position: { lat: parseFloat(marker.latitude), lng: parseFloat(marker.longitude) },
         map: this.map,
         animation: google.maps.Animation.DROP,
-        title: 'Hello World!',
+        title: marker.nam,
         icon: image
       });
       var contentString = `
