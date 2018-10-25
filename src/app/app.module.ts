@@ -2,15 +2,18 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { FiltersComponent } from './components/filters/filters.component';
+import { SearchComponent } from './components/search/search.component';
+
+import { AppRoutingModule }   from './app.routes';
 
 @NgModule({
   declarations: [
     AppComponent,
-    FiltersComponent
+    SearchComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
