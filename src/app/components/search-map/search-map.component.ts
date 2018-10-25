@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, ViewChild, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import {} from '@types/googlemaps';
 
 @Component({
@@ -9,6 +9,7 @@ import {} from '@types/googlemaps';
 export class SearchMapComponent implements OnInit {
   @ViewChild('googleMap') googleMap: any;
   @Output() location = new EventEmitter<{}>();
+  @Input() places = [];
   initialLocation = new google.maps.LatLng(-34.906836, -56.180388);
   map: google.maps.Map;
   googlePlacesService: google.maps.places.PlacesService;
@@ -20,6 +21,12 @@ export class SearchMapComponent implements OnInit {
 
   ngOnInit() {
     this.loadMap();
+  }
+
+  ngOnChanges(changes) {
+    if(changes.places && this.places && this.places.length > 0) {
+      this.adjustMap(this.places)
+    }
   }
 
   loadMap() {
@@ -38,6 +45,25 @@ export class SearchMapComponent implements OnInit {
       ]
     });
     this.setCircleEvent();
+  }
+
+  adjustMap(places) {
+    console.log(places)
+    var bounds = new google.maps.LatLngBounds();
+    places.forEach(function(place) {
+      if (!place.geometry) {
+        console.log("Returned place contains no geometry");
+        return;
+      }
+
+      if (place.geometry.viewport) {
+        bounds.union(place.geometry.viewport);
+      } else {
+        bounds.extend(place.geometry.location);
+      }
+    }.bind(this));
+
+    this.map.fitBounds(bounds);
   }
 
   setCircleEvent() {
@@ -67,7 +93,7 @@ export class SearchMapComponent implements OnInit {
         }
 
         this.location.emit({
-          position: searchArea.getBounds(),
+          position: searchArea.getCenter(),
           radius: searchArea.getRadius(),
         });
       });

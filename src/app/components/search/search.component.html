@@ -4,7 +4,7 @@
   </div>
   <div class="search-option">
     <div class="name">Location</div>
-    <input [(ngModel)]="location">
+    <input id="map-location" class='search-input' type="text" placeholder="">
   </div>
   <div class="search-option" *ngIf="results">
     <div class="name">Results ({{results.length}})</div>
@@ -23,4 +23,4 @@
   </div>
   <button class="search" (click)="search()">Search</button>
 </div>
-<div class="map" (location)="updateLocation($event)"></div>
+<search-map [places]="places" (location)="updateLocation($event)"></search-map>
