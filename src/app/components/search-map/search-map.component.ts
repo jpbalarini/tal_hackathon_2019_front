@@ -154,7 +154,12 @@ export class SearchMapComponent implements OnInit, OnChanges {
         const dealershipCircle = new google.maps.Circle({
           center: circleLocation,
           map: this.map,
-          radius: environment.SMALL_CIRCLE_RADIUS
+          radius: environment.SMALL_CIRCLE_RADIUS,
+          strokeColor: '#cacaca',
+          strokeOpacity: 0.3,
+          strokeWeight: 1,
+          fillColor: '#cacaca',
+          fillOpacity: 0.5
         });
       }
     }
