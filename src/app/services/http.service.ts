@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, XHRBackend, RequestOptions, Request, RequestOptionsArgs, Response, Headers } from '@angular/http';
 import { HttpClient, HttpHandler, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
+import { environment } from '../../environments/environment';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
@@ -23,6 +24,6 @@ export class HttpService extends HttpClient {
   }
 
   getApiUrl(): string {
-    return 'http://192.168.86.57:3000/api/v1'
+    return environment.APIUrl;
   }
 }

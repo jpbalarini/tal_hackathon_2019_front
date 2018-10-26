@@ -1,5 +1,6 @@
 import { Component, ViewChild, OnInit, Output, Input, EventEmitter, OnChanges } from '@angular/core';
 import {} from '@types/googlemaps';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'search-map',
@@ -18,6 +19,7 @@ export class SearchMapComponent implements OnInit, OnChanges {
   maxSearchRadius = 50000;
   minSearchRadius = 2000;
   maxCirclesReached = false;
+  DEBUG = true;
 
   constructor() {}
 
@@ -146,13 +148,15 @@ export class SearchMapComponent implements OnInit, OnChanges {
       });
     }
 
-    for (let circle of this.circles) {
-      var circleLocation = new google.maps.LatLng(circle.latitude, circle.longitude);
-      const dealershipCircle = new google.maps.Circle({
-        center: circleLocation,
-        map: this.map,
-        radius: 2000
-      });
+    if (this.DEBUG) {
+      for (let circle of this.circles) {
+        var circleLocation = new google.maps.LatLng(circle.latitude, circle.longitude);
+        const dealershipCircle = new google.maps.Circle({
+          center: circleLocation,
+          map: this.map,
+          radius: environment.SMALL_CIRCLE_RADIUS
+        });
+      }
     }
   }
 }
