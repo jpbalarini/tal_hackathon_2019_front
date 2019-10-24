@@ -9,16 +9,17 @@ import 'rxjs/add/observable/throw';
 
 @Injectable()
 export class DealershipsService {
-  private dealershipsUrl = this.http.getApiUrl() + '/dealerships';
+  private dealershipsUrl = this.http.getApiUrl() + '/stats';
 
   constructor (private http: HttpService) {}
 
-  findDealerships(latitude, longitude, radius) {
+  findDealerships(topLeft, bottomRight, yearFilter) {
     let params = new HttpParams();
-    params = params.append('longitude', longitude);
-    params = params.append('latitude', latitude);
-    params = params.append('radius', radius);
-    return this.http.get(`${this.dealershipsUrl}/find`, { params: params }).catch(this.http.handleError)
+    params = params.append('top_left', JSON.stringify(topLeft));
+    params = params.append('bottom_right', JSON.stringify(bottomRight));
+    params = params.append('size', "100");
+    params = params.append('year',yearFilter)
+    return this.http.get(`${this.dealershipsUrl}`, { params: params }).catch(this.http.handleError)
   }
 
   export(ids) {

@@ -6,25 +6,35 @@
     <div class="name">Go to location</div>
     <input id="map-location" class='search-input' type="text" placeholder="">
   </div>
-  <button [disabled]="!latitude || !longitude || !radius" class="search" (click)="search()">Search</button>
-  <button [disabled]="results.length == 0" class="search" (click)="downloadCsv()">Export</button>
+  <input [(ngModel)]="yearFilter" #ctrl="ngModel" type="text" placeholder="year">
+  <input type="text" placeholder="make">
+  <input type="text" placeholder="model">
+  <button class="search" (click)="filter()">Filter</button>
   <div class="search-option" *ngIf="results.length > 0">
-    <div class="title">Results ({{results.length}})</div>
+    <div class="title">Latest Transactions ({{results.length}})</div>
     <div class="results">
-      <div class="result" *ngFor="let result of results">
-        <div class="name">{{result.name}}</div>
-        <a href="{{result.website}}" class="website">{{result.website}}</a>
-        <div>Address: {{result.formatted_address}}</div>
-        <div>Phone number: {{result.formatted_phone_number}}</div>
-        <div>Rating: {{result.rating}}</div>
-        <div class="tags">
-          <div class="tag" *ngFor="let tag of result.tags">{{tag}}</div>
-        </div>
-      </div>
+      <table>
+        <tr>
+          <th> Dealership </th>
+          <th> Year </th>
+          <th> Make </th>
+          <th> Model </th>
+          <th> Condition </th>
+          <th> Date Sold </th>
+        </tr>
+        <tr *ngFor="let result of results">
+          <td>Name here</td>
+          <td *ngIf="result && result._source.vehicle.year">{{result._source.vehicle.year}}</td>
+          <td *ngIf="result && result._source.vehicle.make">{{result._source.vehicle.make}}</td>
+          <td *ngIf="result && result._source.vehicle.model">{{result._source.vehicle.model}}</td>
+          <td>Used</td>
+          <td *ngIf="result && result._source.stats.last_seen">{{result._source.stats.last_seen}}</td>
+        </tr>
+      </table>
     </div>
   </div>
 </div>
-<search-map [places]="places" [markers]="results" [circles]="circles" (location)="updateLocation($event)"></search-map>
+<search-map [places]="places" [markers]="results" [circles]="circles" (location)="search($event)"></search-map>
 <ngx-spinner
 bdColor = "rgba(51, 51, 51, 0.8)"
 size = "large"

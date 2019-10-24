@@ -18,6 +18,9 @@ export class SearchComponent {
   radius: number;
   filters = {};
   places = [];
+  yearFilter: string = "";
+  currentLocation = null;
+
 
   constructor(private dealershipsService: DealershipsService, private spinner: NgxSpinnerService) {}
 
@@ -51,16 +54,19 @@ export class SearchComponent {
     this.radius = event.radius;
   }
 
-  search() {
+  filter(){
+    console.log(this.yearFilter)
+    this.search(this.currentLocation)
+  }
+
+  search(location) {
+    this.currentLocation = location
     this.spinner.show();
     this.results = []
-    this.dealershipsService.findDealerships(this.latitude, this.longitude, this.radius).subscribe(
+    this.dealershipsService.findDealerships(location.topLeft, location.bottomRight, this.yearFilter).subscribe(
       data => {
-        this.results = data.dealerships;
-        this.circles = data.circles;
-        if (!this.results || this.results.length <= 0) {
-          this.errorMessage = 'No dealerships available'
-        }
+        this.results = data.transactions.hits;
+        console.log("RESULTS!!!")
         console.log(this.results);
         this.spinner.hide();
       },
@@ -69,6 +75,12 @@ export class SearchComponent {
         this.spinner.hide();
       }
     );
+  }
+
+  randomCondition(){
+    var conditions = ["Used", "New"]
+    var randomIndex = Math.floor(Math.random() * conditions.length); 
+    return conditions[randomIndex];
   }
 
   downloadCsv() {

@@ -20,6 +20,7 @@ export class SearchMapComponent implements OnInit, OnChanges {
   minSearchRadius = 2000;
   maxCirclesReached = false;
   DEBUG = true;
+  map_markers = []
 
   constructor() {}
 
@@ -32,7 +33,9 @@ export class SearchMapComponent implements OnInit, OnChanges {
     if (changes.places && this.places && this.places.length > 0) {
       this.adjustMap(this.places)
     }
-    if(changes.circles && this.circles && this.circles.length > 0) {
+    if (changes.markers) {
+      console.log("here....")
+      this.deleteMarkers()
       this.generateMarkers()
     }
   }
@@ -53,6 +56,29 @@ export class SearchMapComponent implements OnInit, OnChanges {
       ]
     });
     this.setCircleEvent();
+    
+
+    google.maps.event.addListener(this.map, 'dragend', () => {
+      var bounds = this.map.getBounds();
+
+      var topLeft = {
+        lat: bounds.getNorthEast().lat(),
+        lon: bounds.getSouthWest().lng()
+      }
+
+      var bottomRight = {
+        lat: bounds.getSouthWest().lat(),
+        lon: bounds.getNorthEast().lng()
+      }
+
+      this.location.emit({
+        topLeft: topLeft,
+        bottomRight: bottomRight
+      });
+    });
+
+
+
   }
 
   adjustMap(places) {
@@ -120,18 +146,45 @@ export class SearchMapComponent implements OnInit, OnChanges {
     });
   }
 
+  deleteMarkers(){
+    for(var i=0; i<this.map_markers.length; i++){
+      console.log(this.map_markers[i])
+      this.map_markers[i].setMap(null);
+    }
+  }
+
   generateMarkers() {
     const image = '../../../assets/TAL-marker.png';
 
     console.log(this.markers)
-    for (let marker of this.markers) {
+
+    // var uniqueMarkers = this.markers.filter(function(elem, index, self) {
+    //   console.log(elem._source.stats.location.lat)
+    //   console.log(self)
+    //   return self[index]._source.stats.location.lat !== elem._source.stats.location.lat;
+    // })
+
+    const uniqueMarkers = this.markers.filter((marker, index, self) =>
+      index === self.findIndex((t) => (
+        t._source.stats.location.lat === marker._source.stats.location.lat &&
+        t._source.stats.location.lon === marker._source.stats.location.lon
+      ))
+    )
+
+
+    console.log("unique markers!")
+    console.log(uniqueMarkers)
+
+
+    for (let marker of uniqueMarkers) {
       const dealershipMarker = new google.maps.Marker({
-        position: { lat: parseFloat(marker.latitude), lng: parseFloat(marker.longitude) },
+        position: { lat: parseFloat(marker._source.stats.location.lat), lng: parseFloat(marker._source.stats.location.lon) },
         map: this.map,
         animation: google.maps.Animation.DROP,
         title: marker.nam,
         icon: image
       });
+      this.map_markers.push(dealershipMarker);
       var contentString = `
         <div class="name">Name: ${marker.name}</div>
         <div>Website: ${marker.website}</div>

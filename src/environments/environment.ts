@@ -5,6 +5,6 @@
 
 export const environment = {
   production: false,
-  APIUrl: 'http://localhost:3000/api/v1',
+  APIUrl: 'http://192.168.86.95:3000/api/v1',
   SMALL_CIRCLE_RADIUS: 2000
 };
