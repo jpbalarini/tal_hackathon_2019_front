@@ -10,6 +10,7 @@ import { environment } from '../../../environments/environment';
 export class SearchMapComponent implements OnInit, OnChanges {
   @ViewChild('googleMap') googleMap: any;
   @Output() location = new EventEmitter<{}>();
+  @Output() dealership = new EventEmitter<{}>();
   @Input() places = [];
   @Input() markers: [any];
   @Input() circles: [any];
@@ -34,7 +35,6 @@ export class SearchMapComponent implements OnInit, OnChanges {
       this.adjustMap(this.places)
     }
     if (changes.markers) {
-      console.log("here....")
       this.deleteMarkers()
       this.generateMarkers()
     }
@@ -158,22 +158,12 @@ export class SearchMapComponent implements OnInit, OnChanges {
 
     console.log(this.markers)
 
-    // var uniqueMarkers = this.markers.filter(function(elem, index, self) {
-    //   console.log(elem._source.stats.location.lat)
-    //   console.log(self)
-    //   return self[index]._source.stats.location.lat !== elem._source.stats.location.lat;
-    // })
-
     const uniqueMarkers = this.markers.filter((marker, index, self) =>
       index === self.findIndex((t) => (
         t._source.stats.location.lat === marker._source.stats.location.lat &&
         t._source.stats.location.lon === marker._source.stats.location.lon
       ))
     )
-
-
-    console.log("unique markers!")
-    console.log(uniqueMarkers)
 
 
     for (let marker of uniqueMarkers) {
@@ -196,7 +186,14 @@ export class SearchMapComponent implements OnInit, OnChanges {
         content: contentString
       });
 
-      dealershipMarker.addListener('click', function() {
+
+
+      dealershipMarker.addListener('click', () => {
+        console.log("MARKERRRR")
+        console.log(marker._routing)
+        this.dealership.emit({
+          routing: marker._routing
+        }); 
         infowindow.open(this.map, dealershipMarker);
       });
     }

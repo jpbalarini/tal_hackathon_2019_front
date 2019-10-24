@@ -20,6 +20,7 @@ export class SearchComponent {
   places = [];
   yearFilter: string = "";
   currentLocation = null;
+  currentRouting = null;
 
 
   constructor(private dealershipsService: DealershipsService, private spinner: NgxSpinnerService) {}
@@ -55,7 +56,12 @@ export class SearchComponent {
   }
 
   filter(){
-    console.log(this.yearFilter)
+    this.search(this.currentLocation)
+  }
+
+  filterByDealership(routing){
+    console.log("llego acaaa")
+    this.currentRouting = routing;
     this.search(this.currentLocation)
   }
 
@@ -63,7 +69,7 @@ export class SearchComponent {
     this.currentLocation = location
     this.spinner.show();
     this.results = []
-    this.dealershipsService.findDealerships(location.topLeft, location.bottomRight, this.yearFilter).subscribe(
+    this.dealershipsService.findDealerships(location.topLeft, location.bottomRight, this.yearFilter, this.currentRouting).subscribe(
       data => {
         this.results = data.transactions.hits;
         console.log("RESULTS!!!")
