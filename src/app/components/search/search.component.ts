@@ -71,7 +71,7 @@ export class SearchComponent {
     this.dealershipsService.findDealerships(
       this.boundsToPoints(bounds).topLeft,
       this.boundsToPoints(bounds).bottomRight,
-      this.yearFilter, this.makeFilter, this.modelFilter, this.currentRouting)
+      this.yearFilter, this.makeFilter, this.modelFilter, this.currentRouting, this.showStats)
     .subscribe(
       data => {
         this.results = data.transactions.hits;
