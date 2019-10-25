@@ -43,8 +43,8 @@
           <th> Amount of sales </th>
         </tr>
         <tr *ngFor="let result of results">
-          <td>{{result.inner_hits.dealer.hits.hits[0]._source.dealer.name}}</td>
-          <td>{{result._source.vehicle.year}}</td>
+          <td>{{result._source.dealer.name}}</td>
+          <td>{{result.inner_hits.vehicle.hits.total}}</td>
         </tr>
       </table>
     </div>

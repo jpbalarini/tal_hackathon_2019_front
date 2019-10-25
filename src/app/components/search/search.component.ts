@@ -52,6 +52,7 @@ export class SearchComponent {
 
   toggleStats(){
     this.showStats = !this.showStats;
+    this.search(this.currentBounds)
   }
 
   filter(){
