@@ -10,17 +10,18 @@
   <input [(ngModel)]="makeFilter" #ctrl="ngModel" type="text" placeholder="make" class="inline-search-option">
   <input [(ngModel)]="modelFilter" #ctrl="ngModel" type="text" placeholder="model" class="inline-search-option">
   <button class="search" (click)="filter()">Filter</button>
-  <div class="search-option" *ngIf="results.length > 0">
+  <button class="search" (click)="toggleStats()">Stats</button>
+  <div class="search-option" *ngIf="results.length > 0 && !showStats">
     <div class="title">Latest Transactions ({{results.length}})</div>
     <div class="results">
-      <table>
+      <table id="resultsTable">
         <tr>
-          <th> Dealership </th>
-          <th> Year </th>
-          <th> Make </th>
-          <th> Model </th>
-          <th> Condition </th>
-          <th> Date Sold </th>
+          <th class="table-header"> Dealership </th>
+          <th class="table-header"> Year </th>
+          <th class="table-header"> Make </th>
+          <th class="table-header"> Model </th>
+          <th class="table-header"> Condition </th>
+          <th class="table-header"> Date Sold </th>
         </tr>
         <tr *ngFor="let result of results">
           <td>{{result.inner_hits.dealer.hits.hits[0]._source.dealer.name}}</td>
@@ -29,6 +30,21 @@
           <td *ngIf="result && result._source.vehicle.model">{{result._source.vehicle.model}}</td>
           <td>Used</td>
           <td *ngIf="result && result._source.stats.last_seen">{{result._source.stats.last_seen}}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="search-option" *ngIf="showStats">
+    <div class="title">Dealerships with the most sales</div>
+    <div class="results">
+      <table id="statsTable">
+        <tr>
+          <th> Dealership </th>
+          <th> Amount of sales </th>
+        </tr>
+        <tr *ngFor="let result of results">
+          <td>{{result.inner_hits.dealer.hits.hits[0]._source.dealer.name}}</td>
+          <td>{{result._source.vehicle.year}}</td>
         </tr>
       </table>
     </div>

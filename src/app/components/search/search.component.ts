@@ -26,6 +26,7 @@ export class SearchComponent {
     new google.maps.LatLng(30.291289492539125, -97.59066179809571)
   );
   currentRouting = null;
+  showStats = false;
 
 
   constructor(private dealershipsService: DealershipsService, private spinner: NgxSpinnerService) {}
@@ -49,7 +50,12 @@ export class SearchComponent {
     }.bind(this));
   }
 
+  toggleStats(){
+    this.showStats = !this.showStats;
+  }
+
   filter(){
+    this.toggleStats()
     this.search(this.currentBounds)
   }
 

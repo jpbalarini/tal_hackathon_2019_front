@@ -6,6 +6,36 @@
   }
 }
 
+#resultsTable {
+  color: #505050
+}
+
+#resultsTable th{
+  text-align: left;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+#resultsTable td {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+#statsTable {
+  color: #505050
+}
+
+#statsTable th{
+  text-align: left;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+#statsTable td {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
 .filters {
   height: 100%;
   position: fixed;
