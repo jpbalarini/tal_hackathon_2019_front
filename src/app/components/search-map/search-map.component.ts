@@ -31,6 +31,10 @@ export class SearchMapComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes) {
+    if (changes.places && this.places && this.places.length > 0) {
+      this.adjustMap(this.places)
+    }
+
     if (changes.markers) {
       this.deleteMarkers()
       this.generateMarkers()
@@ -63,7 +67,25 @@ export class SearchMapComponent implements OnInit, OnChanges {
       var bounds = this.map.getBounds();
       this.location.emit(bounds);
     });
+  }
 
+  adjustMap(places) {
+    console.log(places);
+    const bounds = new google.maps.LatLngBounds();
+    places.forEach(function(place) {
+      if (!place.geometry) {
+        console.log('Returned place contains no geometry');
+        return;
+      }
+
+      if (place.geometry.viewport) {
+        bounds.union(place.geometry.viewport);
+      } else {
+        bounds.extend(place.geometry.location);
+      }
+    }.bind(this));
+
+    this.map.fitBounds(bounds);
   }
 
   deleteMarkers(){
