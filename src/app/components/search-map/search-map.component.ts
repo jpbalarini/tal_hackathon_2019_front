@@ -31,9 +31,6 @@ export class SearchMapComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes) {
-    if (changes.places && this.places && this.places.length > 0) {
-      this.adjustMap(this.places)
-    }
     if (changes.markers) {
       this.deleteMarkers()
       this.generateMarkers()
@@ -55,109 +52,28 @@ export class SearchMapComponent implements OnInit, OnChanges {
         }
       ]
     });
-    this.setCircleEvent();
-    
+
+    google.maps.event.addListenerOnce(this.map, 'idle', () => {
+      // only the first time the map is loaded
+      var bounds = this.map.getBounds();
+      this.location.emit(bounds);
+    });
 
     google.maps.event.addListener(this.map, 'dragend', () => {
       var bounds = this.map.getBounds();
-
-      var topLeft = {
-        lat: bounds.getNorthEast().lat(),
-        lon: bounds.getSouthWest().lng()
-      }
-
-      var bottomRight = {
-        lat: bounds.getSouthWest().lat(),
-        lon: bounds.getNorthEast().lng()
-      }
-
-      this.location.emit({
-        topLeft: topLeft,
-        bottomRight: bottomRight
-      });
+      this.location.emit(bounds);
     });
 
-
-
-  }
-
-  adjustMap(places) {
-    console.log(places);
-    const bounds = new google.maps.LatLngBounds();
-    places.forEach(function(place) {
-      if (!place.geometry) {
-        console.log('Returned place contains no geometry');
-        return;
-      }
-
-      if (place.geometry.viewport) {
-        bounds.union(place.geometry.viewport);
-      } else {
-        bounds.extend(place.geometry.location);
-      }
-    }.bind(this));
-
-    this.map.fitBounds(bounds);
-  }
-
-  setCircleEvent() {
-    this.map.addListener('click', (event) => {
-      if (this.maxCirclesReached) return;
-      this.maxCirclesReached = true;
-
-      const searchArea = new google.maps.Circle({
-        map: this.map,
-        center: event.latLng,
-        radius: this.minSearchRadius,
-        draggable: true,
-        editable: true,
-        strokeColor: '#53af7e',
-        strokeOpacity: 0.8,
-        strokeWeight: 1,
-        fillColor: '#53af7e',
-        fillOpacity: 0.3
-      });
-
-      this.location.emit({
-        position: searchArea.getCenter(),
-        radius: searchArea.getRadius(),
-      });
-
-      google.maps.event.addListener(searchArea, 'dragend', () => {
-        this.location.emit({
-          position: searchArea.getCenter(),
-          radius: searchArea.getRadius(),
-        });
-      });
-
-      google.maps.event.addListener(searchArea, 'radius_changed', () => {
-        if (searchArea.getRadius() > this.maxSearchRadius) {
-          searchArea.setRadius(this.maxSearchRadius);
-        }
-        if (searchArea.getRadius() < this.minSearchRadius) {
-          searchArea.setRadius(this.minSearchRadius);
-        }
-
-        this.location.emit({
-          position: searchArea.getCenter(),
-          radius: searchArea.getRadius(),
-        });
-      });
-    });
   }
 
   deleteMarkers(){
     for(var i=0; i<this.map_markers.length; i++){
-      console.log(this.map_markers[i])
       this.map_markers[i].setMap(null);
     }
   }
 
   generateMarkers() {
     const image = '../../../assets/TAL-marker.png';
-
-    console.log(this.markers)
-
     const uniqueMarkers = this.markers.filter((marker, index, self) =>
       index === self.findIndex((t) => (
         t._source.stats.location.lat === marker._source.stats.location.lat &&
@@ -167,51 +83,31 @@ export class SearchMapComponent implements OnInit, OnChanges {
 
 
     for (let marker of uniqueMarkers) {
+      var dealerData = marker.inner_hits.dealer.hits.hits[0]._source.dealer;
       const dealershipMarker = new google.maps.Marker({
         position: { lat: parseFloat(marker._source.stats.location.lat), lng: parseFloat(marker._source.stats.location.lon) },
         map: this.map,
         animation: google.maps.Animation.DROP,
-        title: marker.nam,
+        title: dealerData.name,
         icon: image
       });
       this.map_markers.push(dealershipMarker);
       var contentString = `
-        <div class="name">Name: ${marker.name}</div>
-        <div>Website: ${marker.website}</div>
-        <div>Address: ${marker.formatted_address}</div>
-        <div>Phone number: ${marker.formatted_phone_number}</div>
-        <div>Rating: ${marker.rating}</div>
+        <div class="name">Name: ${dealerData.name}</div>
+        <div>Website: ${dealerData.url}</div>
+        <div>Address: ${dealerData.address}</div>
+        <div>Phone number: ${dealerData.phone_number}</div>
       `
       var infowindow = new google.maps.InfoWindow({
         content: contentString
       });
 
-
-
       dealershipMarker.addListener('click', () => {
-        console.log("MARKERRRR")
-        console.log(marker._routing)
         this.dealership.emit({
           routing: marker._routing
-        }); 
+        });
         infowindow.open(this.map, dealershipMarker);
       });
-    }
-
-    if (this.DEBUG) {
-      for (let circle of this.circles) {
-        var circleLocation = new google.maps.LatLng(circle.latitude, circle.longitude);
-        const dealershipCircle = new google.maps.Circle({
-          center: circleLocation,
-          map: this.map,
-          radius: environment.SMALL_CIRCLE_RADIUS,
-          strokeColor: '#cacaca',
-          strokeOpacity: 0.3,
-          strokeWeight: 1,
-          fillColor: '#cacaca',
-          fillOpacity: 0.5
-        });
-      }
     }
   }
 }

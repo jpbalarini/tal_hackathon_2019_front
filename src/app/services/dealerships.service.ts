@@ -13,13 +13,21 @@ export class DealershipsService {
 
   constructor (private http: HttpService) {}
 
-  findDealerships(topLeft, bottomRight, yearFilter, routing) {
+  findDealerships(topLeft, bottomRight, year, make, model, routing) {
     let params = new HttpParams();
     params = params.append('top_left', JSON.stringify(topLeft));
     params = params.append('bottom_right', JSON.stringify(bottomRight));
     params = params.append('size', "100");
-    params = params.append('year',yearFilter)
-    if (routing != null) {
+    if (year) {
+      params = params.append('year', year)
+    }
+    if (make) {
+      params = params.append('make', make)
+    }
+    if (model) {
+      params = params.append('model', model)
+    }
+    if (routing) {
       params = params.append('routing', routing)
     }
     return this.http.get(`${this.dealershipsUrl}`, { params: params }).catch(this.http.handleError)

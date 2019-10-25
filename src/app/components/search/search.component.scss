@@ -23,10 +23,22 @@
     position: absolute;
     top: 0px;
     left: 0px;
-    background: #53af7e;
+    background: white;
     text-align: center;
     width: 100%;
     padding: 10px 0px;
+
+    img {
+      height: 30px;
+    }
+  }
+
+  .inline-search-option {
+    border-radius: 5px;
+    background: white;
+    border: none;
+    font-size: 16px;
+    padding: 10px;
   }
 
   .search-option {
@@ -36,7 +48,7 @@
     margin: 10px 0px;
 
     .name {
-      font-size: 20px;
+      font-size: 18px;
       padding-bottom: 5px;
     }
 
@@ -80,10 +92,12 @@
   }
 
   .search {
-    background: #53af7e;
+    background: #4480c2;
     color: white;
     padding: 8px;
     font-size: 16px;
     border-radius: 8px;
+    min-width: 75px;
+    min-height: 38px;
   }
 }

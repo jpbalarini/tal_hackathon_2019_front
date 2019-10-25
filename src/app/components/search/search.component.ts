@@ -19,7 +19,12 @@ export class SearchComponent {
   filters = {};
   places = [];
   yearFilter: string = "";
-  currentLocation = null;
+  makeFilter: string = "";
+  modelFilter: string = "";
+  currentBounds = new google.maps.LatLngBounds(
+    new google.maps.LatLng(30.241621608162028, -97.81038836059571),
+    new google.maps.LatLng(30.291289492539125, -97.59066179809571)
+  );
   currentRouting = null;
 
 
@@ -28,13 +33,8 @@ export class SearchComponent {
 
   ngOnInit() {
     var mapInput: HTMLInputElement = <HTMLInputElement> document.getElementById('map-location');
-    var defaultBounds = new google.maps.LatLngBounds(
-      new google.maps.LatLng(-34.881836, -56.130388),
-      new google.maps.LatLng(-34.931836, -56.230388)
-    );
-
     var searchBox = new google.maps.places.SearchBox(mapInput, {
-      bounds: defaultBounds
+      bounds: this.currentBounds
     });
 
     searchBox.addListener('places_changed', function() {
@@ -49,31 +49,26 @@ export class SearchComponent {
     }.bind(this));
   }
 
-  updateLocation(event) {
-    this.latitude = event.position.lat();
-    this.longitude = event.position.lng();
-    this.radius = event.radius;
-  }
-
   filter(){
-    this.search(this.currentLocation)
+    this.search(this.currentBounds)
   }
 
   filterByDealership(routing){
-    console.log("llego acaaa")
     this.currentRouting = routing;
-    this.search(this.currentLocation)
+    this.search(this.currentBounds)
   }
 
-  search(location) {
-    this.currentLocation = location
+  search(bounds) {
+    this.currentBounds = bounds
     this.spinner.show();
     this.results = []
-    this.dealershipsService.findDealerships(location.topLeft, location.bottomRight, this.yearFilter, this.currentRouting).subscribe(
+    this.dealershipsService.findDealerships(
+      this.boundsToPoints(bounds).topLeft,
+      this.boundsToPoints(bounds).bottomRight,
+      this.yearFilter, this.makeFilter, this.modelFilter, this.currentRouting)
+    .subscribe(
       data => {
         this.results = data.transactions.hits;
-        console.log("RESULTS!!!")
-        console.log(this.results);
         this.spinner.hide();
       },
       error =>  {
@@ -83,9 +78,21 @@ export class SearchComponent {
     );
   }
 
+  boundsToPoints(bounds) {
+    var topLeft = {
+      lat: bounds.getNorthEast().lat(),
+      lon: bounds.getSouthWest().lng()
+    }
+    var bottomRight = {
+      lat: bounds.getSouthWest().lat(),
+      lon: bounds.getNorthEast().lng()
+    }
+    return {topLeft: topLeft, bottomRight: bottomRight}
+  }
+
   randomCondition(){
     var conditions = ["Used", "New"]
-    var randomIndex = Math.floor(Math.random() * conditions.length); 
+    var randomIndex = Math.floor(Math.random() * conditions.length);
     return conditions[randomIndex];
   }
 
