@@ -60,7 +60,7 @@ export class SearchComponent {
   }
 
   filterByDealership(routing){
-    this.currentRouting = routing;
+    this.currentRouting = routing.routing;
     this.search(this.currentBounds)
   }
 
