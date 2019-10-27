@@ -51,12 +51,14 @@ export class SearchComponent {
   }
 
   toggleStats(){
+    this.currentRouting = null;
     this.showStats = !this.showStats;
     this.search(this.currentBounds)
   }
 
   filter(){
-    this.toggleStats()
+    this.showStats = false;
+    this.currentRouting = null;
     this.search(this.currentBounds)
   }
 
